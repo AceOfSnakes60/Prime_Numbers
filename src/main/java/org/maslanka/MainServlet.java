@@ -20,57 +20,58 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        String max = req.getParameter("max");
-        System.out.println("main");
-        if(!max.isEmpty()){
-            System.out.println(max);
-            req.setAttribute("primeRange", max);
 
-            req.setAttribute("primeNumbers", calculatePrime(Integer.valueOf(max)));
+        String max = req.getParameter("max");
+        int maxNum;
+        try{
+            maxNum = Integer.parseInt(max);
+        } catch (NumberFormatException e){
+            req.setAttribute("message", "Not a number.");
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            return;
         }
 
+
+
+        if(max.isEmpty()){
+            req.setAttribute("message", "Please add a max number.");
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            return;
+        }
+
+        System.out.println("calculating");
+        req.setAttribute("primeRange", max);
+        req.setAttribute("primeNumbers", calculatePrime(Integer.parseInt(max)));
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
     private String calculatePrime(int max){
 
-        // Check every multiplication of i
-        // for(y=i; i<sqrt(y); i++
-
         boolean isPrimeList[] = new boolean[max+1];
         Arrays.fill(isPrimeList, true);
         int start = 2;
         double end = sqrt(max);
-        int count = 2;
 
         StringBuilder stringBuilder= new StringBuilder();
 
         for(int i = start; i<= end; i++){
             //check every multiplication of i
             if(isPrimeList[i]) {
-                for (int y = i; y * i < max; y++) {
+                for (int y = i; y * i < max+1; y++) {
                     isPrimeList[i * y] = false;
-                    count++;
                 }
-                //stringBuilder.append(i);
-                //stringBuilder.append(", ");
-                //Add prime number to list
-
             }
         }
-        System.out.println(count);
-
-
-        for(int i = 2; i< max; i++){
+        //write down prime numbers to string builder
+        for(int i = 2; i< max+1; i++){
             if(isPrimeList[i]){
                 stringBuilder.append(i);
                 stringBuilder.append(", ");
             }
         }
+        //Remove last coma
+        stringBuilder.delete(stringBuilder.length()-2, stringBuilder.length());
 
-        System.out.println("From string builder: " + stringBuilder);
-        System.out.println(isPrimeList.length);
-        System.out.println(end);
         return stringBuilder.toString();
     }
 }
