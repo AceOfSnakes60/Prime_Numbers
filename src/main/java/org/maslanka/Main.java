@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 public class Main {
     public static void main(String[] args) throws LifecycleException {
+        //https://northcoder.com/post/embedded-tomcat-v90-and-v100/
         int portNum= 3000;
 
         Logger.getLogger("org.apache.catalina").setLevel(Level.FINE);
@@ -26,7 +27,7 @@ public class Main {
         Context context = tomcat.addWebapp("", new File(webappLocation).getAbsolutePath());
 
         Tomcat.addServlet(context, "MainServlet", new MainServlet());
-        context.addServletMappingDecoded("/", "MainServlet");
+        context.addServletMappingDecoded("/mainServlet", "MainServlet");
 
         tomcat.start();
         System.out.println("Tomcat started on port: " + portNum);
