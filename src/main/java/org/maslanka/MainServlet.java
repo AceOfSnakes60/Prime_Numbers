@@ -8,10 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import static java.lang.Math.floor;
 import static java.lang.Math.sqrt;
 
 
@@ -22,6 +20,13 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 
         String max = req.getParameter("max");
+
+        if(max.isEmpty()){
+            req.setAttribute("message", "Please add a max number.");
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            return;
+        }
+
         int maxNum;
         try{
             maxNum = Integer.parseInt(max);
@@ -31,17 +36,15 @@ public class MainServlet extends HttpServlet {
             return;
         }
 
-
-
-        if(max.isEmpty()){
-            req.setAttribute("message", "Please add a max number.");
+        if(maxNum<2){
+            req.setAttribute("message", "Number can't be below 2.");
             req.getRequestDispatcher("/index.jsp").forward(req, resp);
             return;
         }
 
         System.out.println("calculating");
-        req.setAttribute("primeRange", max);
-        req.setAttribute("primeNumbers", calculatePrime(Integer.parseInt(max)));
+        req.setAttribute("primeRange", maxNum);
+        req.setAttribute("primeNumbers", calculatePrime(maxNum));
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 

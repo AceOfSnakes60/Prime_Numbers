@@ -7,6 +7,7 @@
         </label>
         <button type="submit">Submit</button>
     </form>
+    <c:if test="${not empty message}">${message}</c:if>
     <c:if test="${not empty primeRange}"><p>Prime numbers up to ${primeRange}</p> </c:if>
     <c:if test="${not empty primeNumbers}">
         <p>${primeNumbers}</p>
